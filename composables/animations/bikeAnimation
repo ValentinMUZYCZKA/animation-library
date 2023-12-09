@@ -1,0 +1,121 @@
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+export function useBikeAnimation() {
+    gsap.registerPlugin(ScrollTrigger)
+    const tl = gsap.timeline({scrollTrigger: {
+        trigger: ".container",
+        start:"top top",
+        end: "12000 top", 
+        scrub: 2,
+        onUpdate: self => {
+            console.log(self.progress);
+            if(self.progress > 0.98) {
+                tl.seek( '-=0', false );
+            }
+           
+          }
+    }})
+
+    const tlText = gsap.timeline({scrollTrigger: {
+        trigger: ".container",
+        start:"top top",
+        end: "12000 top", 
+        scrub: 1,
+    }})
+    
+
+    function initBikeAnimation(_bike,_camera,renderer){
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+        gsap.fromTo('#loader .loader-text', 
+        { opacity: 1 }, 
+        { opacity: 0,duration: 1})
+       setTimeout(() => {
+        console.log('out');
+        gsap.fromTo('#loader', 
+        { opacity: 1 }, 
+        {opacity: 0,duration: 1,onComplete() {
+            document.querySelector('#loader').remove()
+          }
+        })
+       }, 1000);
+
+      setTimeout(() => {
+        gsap.fromTo('.section.title', 
+        {y:-200, opacity: 0 }, 
+        {y:0, opacity: 1,duration: 2,ease: "power3.out"})
+
+        gsap.fromTo('#mountId', 
+        { filter: 'brightness(0)' }, 
+        { filter: 'brightness(1)', duration: 4,ease: "power3.out"})
+
+
+
+        // INIT SECTION
+        tl.from(_bike.position, {x:1.34, y: 0, z:0.03, ease: "power2.out"}, 0)
+        tl.from(_bike.rotatiion, {x:0.15, y: -0.68, z: 0, ease: "power2.out"}, 0)
+        tlText.from('.section.title',{y:0, opacity: 1, ease: "power2.out"}, .1)
+        tlText.from('.section.section-1', {y:200, opacity: 0, ease: "power2.out"}, 0)
+        tlText.from('.section.section-2', {y:200, opacity: 0, ease: "power2.out"}, 0)
+        tlText.from('.section.section-3', {y:200, opacity: 0, ease: "power2.out"}, 0)
+        tlText.from('.section.section-4', {y:200, opacity: 0, ease: "power2.out"}, 0)
+
+        // FIRST SECTION
+        
+        tlText.to('.section.title',{y:-100, opacity: 0 ,duration: 2, ease: "power2.out"},1)
+        tl.to(_bike.position, {x:-0.59, y: 0.02, z: -0.43, duration: 2, ease: "power2.out"}, .1)
+        tl.to(_bike.rotation, {x:0.16, y: -3.73, z: 0, duration: 2, ease: "power2.out"}, .1)
+        tlText.to('.section.section-1', {y:0, opacity: 1,duration: 2, ease: "power2.out"}, .6)
+
+        // SECOND SECTION
+        tlText.to('.section.section-1',{y:-100, opacity: 0 ,duration: 2, ease: "power2.out"},2.5)
+        tl.to(_bike.position, {x:0, y: 0, z: 0,duration: 2,  ease: "power2.out"}, 2.5)
+        tl.to(_bike.rotation, {x:0, y: -4.66, z: 1.57,duration: 2,  ease: "power2.out"}, 2.5)
+        tlText.to('.section.section-2', {y:0, opacity: 1,duration: 2, ease: "power2.out"}, 3)
+
+        // THIRD SECTION
+        tlText.to('.section.section-2',{y:-100, opacity: 0 ,duration: 2, ease: "power2.out"}, 5.5)
+        tl.to(_bike.position, {x:.82, y: -0.14, z:0.96,duration: 3,  ease: "power2.out"}, 5.5)
+        tl.to(_bike.rotation, {x:-0.03, y: -10.02, z: -0.26,duration: 3,  ease: "power2.out"},5.5)
+        tlText.to('.section.section-3', {y:0, opacity: 1,duration: 2, ease: "power2.out"}, 7.5)
+
+        // THIRD SECTION
+        tlText.to('.section.section-3',{y:-100, opacity: 0 ,duration: 2, ease: "power2.out"}, 11)
+        tl.to(_bike.position, {x:1.35, y: 0.03, z:-8.79,duration: 2, ease: "power2.in"}, 10)
+        tl.to('#mountId', {opacity: 0,duration: 2,  ease: "power1.in"}, 10)
+        tl.to(_bike.rotation, {x:0.37, y: -7.94, z: -0.67,duration: 2, ease: "power2.in"}, 10)
+
+        // // // FOURTH SECTION
+        tlText.to('.section.section-4', {y:0, opacity: 1,duration: 2, ease: "power2.out"}, 16)
+        tl.to(_bike.position, {x:0, y: 0, z: 0,duration: 3, ease: "power3.out",
+        onComplete() {
+            const controls = new OrbitControls( _camera, renderer.domElement )
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            _camera.lookAt(0,0,0)
+            console.log(document.querySelector('.container'));
+            document.querySelector('.container').style.height = '100vh'
+            document.querySelector('#mountId').style.pointerEvents= 'all';
+            document.querySelector('#mountId').style.zIndex= 1;
+            cleanUpBikeAnimation();
+          }
+        }, 13)
+        tl.to('#mountId', {opacity: 1,duration: 1.5,  ease: "power2.in"}, 13.5)
+        tl.to(_bike.rotation, {x:0, y: -5.7, z: 0,duration: 2, ease: "power3.out"}, 14)
+      }, 2000);
+    }
+
+    function cleanUpBikeAnimation() {
+        tl.clear();
+        tl.kill()
+        tlText.clear();
+        tlText.kill()
+    }
+      
+    return {
+        initBikeAnimation,
+        cleanUpBikeAnimation
+      };
+}
