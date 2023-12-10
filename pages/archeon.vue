@@ -27,8 +27,8 @@
           <h2>
             rouge  
           </h2>
-          <p>Elle roule donc</p>
-          <p>très vite</p>
+          <p>Elle est donc</p>
+          <p>très rapide</p>
         </div>
 
         <div class="section-2  section section--half content-left">
@@ -81,7 +81,15 @@
 
 <style lang="scss">
 //Loader
+body {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll; 
+}
 
+body::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
 #loader{
   position: fixed;
   top: 0;
@@ -89,7 +97,7 @@
   width: 100%;
   height: 100vh;
   background-color: #000000;
-  z-index: 100;
+  z-index: 10000;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -127,6 +135,7 @@
   z-index: -1;
 }
 .container{
+  
   height: calc(15 * 100vh);
 }
 
