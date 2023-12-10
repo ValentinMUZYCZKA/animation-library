@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { PerspectiveCamera, Scene, WebGLRenderer } from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import gsap from "gsap"
 
 // importing Composables
 import { useThree } from '@/composables/three/useThree';
@@ -73,7 +73,38 @@ function setupScene() {
       initDatGUI(_bike,'bike', _camera, _light);
       // const controls = new OrbitControls( camera, renderer.domElement );
     }
-    initBikeAnimation(_bike, _camera,_renderer);
+
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+      if(document.querySelector('#loader') !== undefined) {
+        gsap.fromTo('#loader .loader-text', 
+        { opacity: 1 }, 
+        { opacity: 0,duration: 1})
+      setTimeout(() => {
+        gsap.fromTo('#loader', 
+        { opacity: 1 }, 
+        {opacity: 0,duration: 1,onComplete() {
+          document.querySelector('#loader').remove()
+          document.querySelector('.btn-startup').addEventListener('click',(e) => {
+            var audio = new Audio('sounds/startup.mp3');
+            setTimeout(() => {
+              audio.play();
+            }, 100);
+
+            console.log(this);
+            gsap.to('.btn-startup', {opacity: 0, duration: .5,onComplete(){
+              document.querySelector('.btn-startup').remove()
+                
+               setTimeout(() => {
+                initBikeAnimation(_bike, _camera,_renderer);
+               }, 200);
+            }})
+            
+          })
+        }
+      })
+    }, 1000);
+    }
 
   })
 
@@ -120,6 +151,10 @@ onBeforeUnmount(() => {
 <template>
   <div class="container">
     <div class="wrapper">
+      <!-- //<UtilsScrollAnimation /> -->
+      <div class="btn btn-startup">
+        Démarrer <br> l'expérience
+      </div>
       <video id="bg-video" src="/VIDEO-PULSATION-ARCHEON.mp4" autoplay muted loop></video>
       <canvas id="mountId" width="700" height="500" class="m-auto h-[500px] w-[700px] rounded-md" />
     </div>
@@ -129,5 +164,26 @@ onBeforeUnmount(() => {
 <style lang="scss">
 .dg.ac{
   z-index: 10000
+}
+
+.btn.btn-startup{
+  position: absolute;
+    top: 50%;
+    left: 25%;
+    font-size: 25px;
+    transform: translateY(-50%);
+    text-align: center;
+    line-height: 1.4em;
+    border: 1px solid rgba(255,255,255,.4);
+    padding: 15px 25px;
+    border-radius: 17px;
+    font-weight: 600;
+    opacity: .6;
+    transition: all .3s ease-in-out;
+
+    &:hover{
+      opacity: 1;
+      cursor: pointer;
+    }
 }
 </style>

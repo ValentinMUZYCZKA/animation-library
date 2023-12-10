@@ -4,50 +4,29 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 export function useBikeAnimation() {
     gsap.registerPlugin(ScrollTrigger)
-    const tl = gsap.timeline({scrollTrigger: {
+    let tl = null , tlText = null;
+    
+
+    function initBikeAnimation(_bike,_camera,renderer){
+       tl = gsap.timeline({scrollTrigger: {
         trigger: ".container",
         start:"top top",
         end: "12000 top", 
-        scrub: 2,
+        scrub: 1,
         onUpdate: self => {
-            console.log(self.progress);
             if(self.progress > 0.98) {
                 tl.seek( '-=0', false );
             }
-           
           }
     }})
 
-    const tlText = gsap.timeline({scrollTrigger: {
+     tlText = gsap.timeline({scrollTrigger: {
         trigger: ".container",
         start:"top top",
         end: "12000 top", 
         scrub: 1,
     }})
-    
 
-    function initBikeAnimation(_bike,_camera,renderer){
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
-
-        console.log(document.querySelector('#loader'));
-        
-        if(document.querySelector('#loader') !== undefined) {
-          gsap.fromTo('#loader .loader-text', 
-          { opacity: 1 }, 
-          { opacity: 0,duration: 1})
-         setTimeout(() => {
-          console.log('out');
-          gsap.fromTo('#loader', 
-          { opacity: 1 }, 
-          {opacity: 0,duration: 1,onComplete() {
-              document.querySelector('#loader').remove()
-            }
-          })
-         }, 1000);
-        }
-       
-
-      setTimeout(() => {
         gsap.fromTo('.section.title', 
         {y:-200, opacity: 0 }, 
         {y:0, opacity: 1,duration: 2,ease: "power3.out"})
@@ -109,7 +88,7 @@ export function useBikeAnimation() {
         }, 13)
         tl.to('#mountId', {opacity: 1,duration: 1.5,  ease: "power2.in"}, 13.5)
         tl.to(_bike.rotation, {x:0, y: -5.7, z: 0,duration: 2, ease: "power3.out"}, 14)
-      }, 2000);
+      
     }
 
     function cleanUpBikeAnimation() {
