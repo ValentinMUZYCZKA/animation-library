@@ -6,15 +6,15 @@
 
 <style lang="scss">
 #__nuxt{
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #69737b;
 }
 .main-container{
   max-width: 1600px;
   margin: 0 auto;
 }
-
 header nav ul li a{
-  color: #ffffff;
+  color: #000000;
 }
+  
 </style>

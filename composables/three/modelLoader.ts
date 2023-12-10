@@ -46,10 +46,9 @@ export function useLoader() {
             },
 
             // called while loading is progressing
-            function ( xhr ) {
+            function ( xhr ) {                
                 document.querySelector("#loader .loader-counter").innerHTML = Math.floor( xhr.loaded / xhr.total * 100 );                
                 //console.log( Math.floor( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-
             },
             // called when loading has errors
             function ( error ) {

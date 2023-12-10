@@ -4,7 +4,7 @@ export function useDatGUI() {
 
   let gui = new GUI()
 
-    function initDatGUI(_model,modelName, _camera){
+    function initDatGUI(_model,modelName, _camera, _light = null){
       const cubeFolder = gui.addFolder(modelName)
 
       cubeFolder.add(_model.position, 'x', -20, 20, 0.01).name("Move - X")
@@ -22,6 +22,16 @@ export function useDatGUI() {
       cameraFolder.add(_camera.rotation, 'x', -Math.PI * 5, Math.PI * 5, 0.01).name("Rotate - X")
       cameraFolder.add(_camera.rotation, 'y', -Math.PI * 5, Math.PI * 5, 0.01).name("Rotate - Y")
       cameraFolder.add(_camera.rotation, 'z', -Math.PI * 5, Math.PI * 5, 0.01).name("Rotate - Z")
+
+      console.log(_light);
+
+      if(_light != null){
+        const lightFolder = gui.addFolder('Light')
+        
+        lightFolder.add(_light, 'intensity', 0, 2, .01).name("intensity")
+        lightFolder.addColor(_light, 'color').name("Color")
+          .onChange( function() { _light.color.set( params.color ); } );
+      }
     }
 
     function cleanUpDatGUI() {

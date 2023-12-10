@@ -8,34 +8,42 @@ import { useThree } from '@/composables/three/useThree';
 import { useLoader } from '@/composables/three/modelLoader';
 import { useEnvironement } from '@/composables/three/environement';
 import { useCamera } from '@/composables/three/camera';
+import { useLight } from '@/composables/three/Light';
 import { useDatGUI } from '@/composables/three/debug/datGUI';
 import { useBikeAnimation } from '@/composables/animations/bikeAnimation';
+
+
+const canvas = computed(() => document.getElementById('mountId') as HTMLCanvasElement);
+const debug = false;
+const sizes = {
+    width: window.innerWidth -17,
+    height: window.innerHeight -4
+}
+
+let _renderer: WebGLRenderer;
+let _renderLoopId: number;
+let _scene: Scene;
+let _light;
+
+var _mouse = {
+  x: 0,
+  y: 0
+};
+let _camera= new PerspectiveCamera(25,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+
 
 // importing methods from composables
 const { initThree, cleanUpThree } = useThree();
 const { loadModel } = useLoader();
 const { initEnvironement } = useEnvironement();
 const { initCamera } = useCamera();
-const { initDatGUI,cleanUpDatGUI } = useDatGUI();
+const { initLight } = useLight();
 const { initBikeAnimation, cleanUpBikeAnimation } = useBikeAnimation();
-
-const debug = true;
-
-const sizes = {
-    width: window.innerWidth -17,
-    height: window.innerHeight -4
-}
-
-let _scene: Scene;
-let _camera= new PerspectiveCamera(25,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
-let _renderer: WebGLRenderer;
-let _renderLoopId: number;
-
-const canvas = computed(() => document.getElementById('mountId') as HTMLCanvasElement);
+const { initDatGUI,cleanUpDatGUI } = useDatGUI();
 
 function animateObject() {
   // console.log('bike',_bike.position);
@@ -59,9 +67,10 @@ function setupScene() {
 
   initCamera(_camera, sizes,[0,0,6.5],[0,0,0])
   initEnvironement( 'environements/7.hdr',_scene , _renderer, sizes);
+  _light = initLight(_scene, _camera, _mouse);
   const _bike = loadModel('/model/bike.glb', _scene, _camera, _renderLoopId, renderLoop,[1.34, 0, 0.03],[0.15, -0.68, 0], function(_bike,_camera){
     if(debug){
-      initDatGUI(_bike,'bike', _camera);
+      initDatGUI(_bike,'bike', _camera, _light);
       // const controls = new OrbitControls( camera, renderer.domElement );
     }
     initBikeAnimation(_bike, _camera,_renderer);
@@ -69,7 +78,15 @@ function setupScene() {
   })
 
 
+
+  // var mouseGeometry = new SphereGeometry(1, 100, 100);
+  // var mouseMaterial = new MeshLambertMaterial({});
+  // mouseMesh = new Mesh(mouseGeometry, mouseMaterial);
+  // mouseMesh.position.set(0, 0, 0);
+  // _scene.add(mouseMesh);
+
 }
+
 
 
 onMounted(() => {
@@ -92,9 +109,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
   cancelAnimationFrame(_renderLoopId);
   cleanUpThree(_scene, _renderer);
-  cleanUpDatGUI();
   cleanUpBikeAnimation();
-
+  if(debug){
+    cleanUpDatGUI();
+  }
 });
 
 
@@ -107,3 +125,9 @@ onBeforeUnmount(() => {
     </div>
   </div>
 </template>
+
+<style lang="scss">
+.dg.ac{
+  z-index: 10000
+}
+</style>

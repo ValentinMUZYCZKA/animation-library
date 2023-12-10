@@ -1,0 +1,10 @@
+@font-face {
+    font-family: "EmBauhaus";
+    src: local("EmBauhaus"),
+    url('/fonts/EmBauhaus/EmBauhaus.ttf') format("truetype");
+}
+
+#__nuxt{
+    min-height: 100vh;
+    background-color: #000000;
+}

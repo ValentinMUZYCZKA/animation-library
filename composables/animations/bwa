@@ -1,0 +1,101 @@
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+export function useBWAnimation() {
+    const tl = gsap.timeline()
+
+    function entrance(){
+
+            // INIT SECTION
+        tl.to('.logo', {
+            display:'flex', height: '100vh', opacity: 0,
+            ease: "power2.out"},'start')
+        tl.to('.logo .letters.first-letter', {
+                position: 'relative', left: '50%',x : '-150%',
+                ease: "power2.out"},'start')
+            .to('.logo .letters.second-letter', {
+                position: 'relative', left: '50%',x : '-135%',
+                ease: "power2.out"},'start')
+            .to('.logo .letters.third-letter', {
+                position: 'relative', left: '50%',x : '-160%',
+                ease: "power2.out"},'start')
+            .to('.logo .letters', {
+                fontSize: '200px',
+                ease: "power2.out"},'start')
+        
+       
+            // FIRST SECTION
+            .to('.logo', {
+                display:'flex', height: '100vh', opacity: 1,
+                duration: 2,
+                ease: "power3.out"},'first screen')    
+            
+            // SECOND SECTION           
+            tl.to('.logo .letters.first-letter', {
+                position: 'relative', left: '0%',x : '0%',y : 0,
+                duration: .75,
+                delay: 0,
+                ease: "power3.out"},'second screen')
+            .to('.logo .letters.second-letter', {
+                position: 'relative', left: '0%',x : '0%',y : 150,
+                duration: .75,
+                ease: "power3.out"},'<.15')
+            .to('.logo .letters.third-letter', {
+                position: 'relative', left: '0%',x : '0%',y : 300,
+                duration: .75,
+                ease: "power3.out"},'<.15')
+            .to('.sub-letters span', {
+                display: 'block', opacity: 1,
+                stagger: .05,
+                duration: .75,
+                ease: "power3.out"},'>-.75')
+
+            .to('.sub-letters span', {
+                display: 'none', opacity: 0,
+                stagger: .05,
+                duration: .75,
+                delay: 1.5,
+                ease: "power3.out"},)    
+            
+
+            // THIRD SECTION
+ 
+
+                
+            
+        // // LAST SECTION
+        tl.to('.logo', {
+                display:'flex', height: 30, opacity: 1,
+                duration: 1,
+                ease: "power3.out"},'end')
+            .to('.logo .letters.second-letter', {
+                position: 'relative', left: '0%',x : '0%',y : 0,
+                duration: 1,
+                ease: "power3.out"},'end')
+            .to('.logo .letters.third-letter', {
+                position: 'relative', left: '0%',x : '0%',y : 0,
+                duration: 1,
+                ease: "power3.out"},'end')
+            .to('.logo .letters', {
+                fontSize: '30px',
+                duration: 1,
+                ease: "power3.out",
+                onComplete() {
+                    tl.clear();
+                    tl.kill()
+                  }
+                },'end')     
+        
+    }
+
+    function cleanUpBWAnimation() {
+        console.log('clean up');
+        tl.clear();
+        tl.kill()
+    }
+      
+    return {
+        entrance,
+        cleanUpBWAnimation,
+      };
+}
