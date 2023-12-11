@@ -75,7 +75,7 @@ onBeforeUnmount(() => {
       font-family: 'EmBauhaus', 'Maven Pro', sans-serif;
       font-size: 30px;
       font-weight: 400;
-      color: #09183f;
+      color: #28afcf;
       text-transform: lowercase;
       letter-spacing: 4px;
       position: relative;
@@ -84,7 +84,7 @@ onBeforeUnmount(() => {
       & .main-letter{
         position: relative;
         z-index: 1000;
-        color: #28afcf;
+        color: #09183f;
       }
       & .sub-letters{
         position: absolute;

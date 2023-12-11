@@ -1,9 +1,6 @@
 <script setup lang="ts">
 
-import { Mesh,PlaneGeometry , RectAreaLight,PerspectiveCamera, Scene, WebGLRenderer } from 'three';
-import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
-import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
-
+import { PerspectiveCamera, Scene, WebGLRenderer } from 'three';
 import gsap from "gsap"
 
 // importing Composables
@@ -11,10 +8,9 @@ import { useThree } from '@/composables/three/useThree';
 import { useLoader } from '@/composables/three/modelLoader';
 import { useEnvironement } from '@/composables/three/environement';
 import { useCamera } from '@/composables/three/camera';
-import { useLightMouse } from '@/composables/three/Light-mouse';
+import { useLight } from '@/composables/three/Light';
 import { useDatGUI } from '@/composables/three/debug/datGUI';
 import { useBikeAnimation } from '@/composables/animations/bikeAnimation';
-
 
 
 const canvas = computed(() => document.getElementById('mountId') as HTMLCanvasElement);
@@ -45,7 +41,7 @@ const { initThree, cleanUpThree } = useThree();
 const { loadModel } = useLoader();
 const { initEnvironement } = useEnvironement();
 const { initCamera } = useCamera();
-const { initLightMouse } = useLightMouse();
+const { initLight } = useLight();
 const { initBikeAnimation, cleanUpBikeAnimation } = useBikeAnimation();
 const { initDatGUI,cleanUpDatGUI } = useDatGUI();
 
@@ -71,21 +67,19 @@ function setupScene() {
 
   initCamera(_camera, sizes,[0,0,6.5],[0,0,0])
   initEnvironement( 'environements/7.hdr',_scene , _renderer, sizes);
-  _light = initLightMouse(_scene, _camera, _mouse);
-
-
-  const _bike = loadModel('/model/bike.glb', _scene, _camera, _renderLoopId, renderLoop,[0, -0.46, 3.58],[0, 0, 0], function(_bike,_camera){
+  _light = initLight(_scene, _camera, _mouse);
+  const _bike = loadModel('/model/bike.glb', _scene, _camera, _renderLoopId, renderLoop,[1.34, 0, 0.03],[0.15, -0.68, 0], function(_bike,_camera){
     if(debug){
       initDatGUI(_bike,'bike', _camera, _light);
       // const controls = new OrbitControls( camera, renderer.domElement );
     }
-    
+
     document.body.scrollTop = document.documentElement.scrollTop = 0;
 
       if(document.querySelector('#loader') !== undefined) {
         gsap.fromTo('#loader .loader-text', 
         { opacity: 1 }, 
-        { opacity: 0,duration: 2})
+        { opacity: 0,duration: 1})
       setTimeout(() => {
         gsap.fromTo('#loader', 
         { opacity: 1 }, 
@@ -95,16 +89,17 @@ function setupScene() {
             var audio = new Audio('sounds/startup.mp3');
             setTimeout(() => {
               audio.play();
-            }, 250);
+            }, 100);
 
             console.log(this);
-            gsap.to('.ignition-container', {opacity: 0, delay: .5, duration: .5,onComplete(){
-              document.querySelector('.ignition-container').remove()
-            }})
-            window.scrollTo(0, 0);                
+            gsap.to('.btn-startup', {opacity: 0, duration: .5,onComplete(){
+              document.querySelector('.btn-startup').remove()
+                
                setTimeout(() => {
-                  initBikeAnimation(_bike, _camera,_renderer);
-                }, 500); 
+                window.scrollTo(0, 0);
+                initBikeAnimation(_bike, _camera,_renderer);
+               }, 200);
+            }})
             
           })
         }
@@ -159,7 +154,7 @@ onBeforeUnmount(() => {
     <div class="wrapper">
       <!-- //<UtilsScrollAnimation /> -->
       <div class="btn btn-startup">
-        <LazyIconesBikeIgnition />
+        Démarrer <br> l'expérience
       </div>
       <video id="bg-video" src="/VIDEO-PULSATION-ARCHEON.mp4" autoplay muted loop></video>
       <canvas id="mountId" width="700" height="500" class="m-auto h-[500px] w-[700px] rounded-md" />
@@ -175,12 +170,16 @@ onBeforeUnmount(() => {
 .btn.btn-startup{
   position: absolute;
     top: 50%;
-    left: 50%;
-    font-size: 40px;
-    transform: translate(-50%);
+    left: 25%;
+    font-size: 25px;
+    transform: translateY(-50%);
     text-align: center;
     line-height: 1.4em;
-    opacity: .4;
+    border: 1px solid rgba(255,255,255,.4);
+    padding: 15px 25px;
+    border-radius: 17px;
+    font-weight: 600;
+    opacity: .6;
     transition: all .3s ease-in-out;
 
     &:hover{

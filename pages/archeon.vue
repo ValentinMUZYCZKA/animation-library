@@ -117,7 +117,7 @@ body::-webkit-scrollbar {
 #mountId{
   position: relative;
   z-index: -1;
-  filter: brightness(0.05);
+  filter: brightness(0);
 }
 .wrapper{
   position: sticky;
@@ -146,7 +146,6 @@ body::-webkit-scrollbar {
   width: 100%;
   height: 100vh;
   pointer-events: none;
-  touch-action: none;
 
   
   .section{

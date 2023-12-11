@@ -13,7 +13,11 @@ export function useBikeAnimation() {
         start:"top top",
         end: "12000 top", 
         scrub: 1,
-       
+        onUpdate: self => {
+            if(self.progress > 0.99) {
+                tl.seek( '-=0', false );
+            }
+          }
     }})
 
      tlText = gsap.timeline({scrollTrigger: {
@@ -23,50 +27,30 @@ export function useBikeAnimation() {
         scrub: 1,
     }})
 
-        let into = gsap.timeline();
-        into.from(_bike.position, 
-            {x:0, y: -0.46, z:3.58})
-        .from(_bike.rotation,
-            {x:0, y: 0, z: 0},0)
-        .from('.section.title',
-            {y:-200, opacity: 0},0)
-        .from('#mountId',
-            { filter: 'brightness(0)' },0)
+        gsap.fromTo('.section.title', 
+        {y:-200, opacity: 0 }, 
+        {y:0, opacity: 1,duration: 2,ease: "power3.out"})
 
-
-        .to(_bike.position, 
-            {x:1.34, y: 0, z:0.03, duration: 1, ease: "power2.out"},0)
-        .to(_bike.rotation, 
-            {x:0.15, y: -0.68, z: 0,duration: 1,  ease: "power2.out"},0)
-        .to('#mountId', 
-            { filter: 'brightness(1)', duration: 3,ease: "power2.out",
-        onComplete(){
-            into.kill();
-
-        }},0)
-        .to('.section.title', 
-            {y:0, opacity: 1,duration: 1,ease: "power2.out"},.5);
-
-
-
-        
+        gsap.fromTo('#mountId', 
+        { filter: 'brightness(0)' }, 
+        { filter: 'brightness(1)', duration: 4,ease: "power3.out"})
 
 
 
         // INIT SECTION
-        //tl.from(_bike.position, {x:1.34, y: 0, z:0.03}, 0)
-       // tl.from(_bike.rotatiion, {x:0.15, y: -0.68, z: 0}, 0)
-        tlText.from('.section.title',{y:0, opacity: 1}, 0)
-        tlText.from('.section.section-1', {y:200, opacity: 0}, 0)
-        tlText.from('.section.section-2', {y:200, opacity: 0}, 0)
-        tlText.from('.section.section-3', {y:200, opacity: 0}, 0)
-        tlText.from('.section.section-4', {y:200, opacity: 0}, 0)
+        tl.from(_bike.position, {x:1.34, y: 0, z:0.03, ease: "power2.out"}, 0)
+        tl.from(_bike.rotatiion, {x:0.15, y: -0.68, z: 0, ease: "power2.out"}, 0)
+        tlText.from('.section.title',{y:0, opacity: 1, ease: "power2.out"}, .1)
+        tlText.from('.section.section-1', {y:200, opacity: 0, ease: "power2.out"}, 0)
+        tlText.from('.section.section-2', {y:200, opacity: 0, ease: "power2.out"}, 0)
+        tlText.from('.section.section-3', {y:200, opacity: 0, ease: "power2.out"}, 0)
+        tlText.from('.section.section-4', {y:200, opacity: 0, ease: "power2.out"}, 0)
 
         // FIRST SECTION
         
-        tlText.to('.section.title',{y:-100, opacity: 0 ,duration: 1, ease: "power2.out"},0)
-        tl.to(_bike.position, {x:-0.59, y: 0.02, z: -0.43, duration: 2, ease: "power2.out"}, 0)
-        tl.to(_bike.rotation, {x:0.16, y: -3.73, z: 0, duration: 2, ease: "power2.out"}, 0)
+        tlText.to('.section.title',{y:-100, opacity: 0 ,duration: 2, ease: "power2.out"},1)
+        tl.to(_bike.position, {x:-0.59, y: 0.02, z: -0.43, duration: 2, ease: "power2.out"}, .1)
+        tl.to(_bike.rotation, {x:0.16, y: -3.73, z: 0, duration: 2, ease: "power2.out"}, .1)
         tlText.to('.section.section-1', {y:0, opacity: 1,duration: 2, ease: "power2.out"}, .6)
 
         // SECOND SECTION
@@ -95,6 +79,7 @@ export function useBikeAnimation() {
             controls.enableZoom = false;
             controls.enablePan = false;
             _camera.lookAt(0,0,0)
+            console.log(document.querySelector('.container'));
             document.querySelector('.container').style.height = '100vh'
             document.querySelector('#mountId').style.pointerEvents= 'all';
             document.querySelector('#mountId').style.zIndex= 1;
@@ -107,10 +92,14 @@ export function useBikeAnimation() {
     }
 
     function cleanUpBikeAnimation() {
-        tl.clear();
-        tl.kill()
-        tlText.clear();
-        tlText.kill()
+        if(tl != null){
+            tl.clear();
+            tl.kill()
+        }
+        if(tlText != null){
+            tlText.clear();
+            tlText.kill()
+        }
     }
       
     return {

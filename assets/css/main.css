@@ -7,4 +7,5 @@
 #__nuxt{
     min-height: 100vh;
     background-color: #000000;
+    transition: all 1s ease-out;
 }

@@ -4,7 +4,7 @@
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #__nuxt{
   background-color: #000000;
   color: #ffffff;

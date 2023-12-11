@@ -13,7 +13,7 @@ export function useEnvironement() {
         hdriLoader.load( url, function ( texture ) {
           const envMap = pmremGenerator.fromEquirectangular( texture ).texture;
           texture.dispose(); 
-          _scene.environment = envMap          
+          _scene.environment = envMap
           _scene.envito
         } );
               

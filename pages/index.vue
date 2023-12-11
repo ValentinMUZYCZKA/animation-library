@@ -1,19 +1,20 @@
 <template>
     <div>
-      <h1 class="main">Welcome to the homepage</h1>
+      <h1 class="home-title">Welcome to the homepage</h1>
     </div>
   </template>
 
-  <style lang="scss">
-    h1.main {
-      height: 100vh;
+<style>
+    h1.home-title{
       width: 100%;
+      height: 100vh;
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 80px;
-      max-width: 899px;
+      max-width: 900px;
       margin: 0 auto;
+      font-size: 90px;
       text-align: center;
     }
-    </style>
+</style>
