@@ -103,8 +103,9 @@ function setupScene() {
             }})
             window.scrollTo(0, 0);                
                setTimeout(() => {
-                  initBikeAnimation(_bike, _camera,_renderer);
-                }, 500); 
+                initBikeAnimation(_bike, _camera,_renderer);
+               }, 200);
+            }})
             
           })
         }
