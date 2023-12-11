@@ -38,7 +38,8 @@
                    
                     color: #FFFFFF;
                     text-decoration: none;
-    
+                    transition: all 1s ease-out;
+
                     &:hover{
                         text-decoration: underline;
                     }
